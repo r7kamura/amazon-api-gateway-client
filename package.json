@@ -1,6 +1,6 @@
 {
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/index.js",
   "name": "amazon-api-gateway-client",
   "repository": "r7kamura/amazon-api-gateway-client",
   "scripts": {

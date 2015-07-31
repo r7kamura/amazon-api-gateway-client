@@ -1,4 +1,4 @@
-import { Client } from '../index.js'
+import { Client } from '../src/index.js'
 
 describe('Client', () => {
   describe('#listRestapis', () => {
