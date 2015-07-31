@@ -3,5 +3,13 @@
   "main": "index.js",
   "name": "amazon-api-gateway-client",
   "repository": "r7kamura/amazon-api-gateway-client",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "devDependencies": {
+    "babel": "^5.8.19",
+    "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "stackable-fetcher": "0.0.3",
+    "stackable-fetcher-aws-signer-v4": "0.0.1"
+  }
 }

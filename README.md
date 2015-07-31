@@ -5,11 +5,11 @@ A client library for Amazon API Gateway.
 ```js
 var Client = require('amazon-api-gateway-client').Client;
 
-var client = new Client(
+var client = new Client({
   accessKeyId: '...',
   region: '...',
   secretAccessKey: '...'
-);
+});
 
 client.listRestapis().then(function (restapis) {
   // ...
