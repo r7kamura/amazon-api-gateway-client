@@ -3,9 +3,18 @@
   "main": "index.js",
   "name": "amazon-api-gateway-client",
   "repository": "r7kamura/amazon-api-gateway-client",
+  "scripts": {
+    "build": "gulp build",
+    "test": "gulp test"
+  },
+  "files": [
+    "lib"
+  ],
   "version": "0.0.1",
   "devDependencies": {
     "babel": "^5.8.19",
+    "gulp-babel": "^5.2.0",
+    "gulp-mocha": "^2.1.3",
     "mocha": "^2.2.5"
   },
   "dependencies": {

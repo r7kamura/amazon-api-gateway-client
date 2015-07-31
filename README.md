@@ -15,3 +15,9 @@ client.listRestapis().then(function (restapis) {
   // ...
 });
 ```
+
+## Development
+```
+npm install
+npm run
+```
