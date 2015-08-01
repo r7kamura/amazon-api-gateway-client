@@ -1,5 +1,5 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
-import Fetcher from 'stackable-fetcher'
+import { Fetcher } from 'stackable-fetcher'
 import Restapi from './restapi'
 
 /**
