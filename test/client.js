@@ -10,7 +10,7 @@ describe('Client', () => {
   client.getFetcher().use(RequestLogger).use(ResponseLogger);
 
   describe('#createResource', () => {
-    it.only('does not raise any error', (done) => {
+    it('does not raise any error', (done) => {
       client.createResource({ parentId: 'a', pathPart: 'b', restapiId: 'c' }).then((resource) => {
         done();
       });
