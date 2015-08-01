@@ -1,6 +1,11 @@
 # amazon-api-gateway-client
 A client library for Amazon API Gateway.
 
+## Install
+```
+npm install amazon-api-gateway-client
+```
+
 ## Usage
 ```js
 var Client = require('amazon-api-gateway-client').Client;
