@@ -56,6 +56,16 @@ export class Client {
   }
 
   /**
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  deleteRestapi({ restapiId }) {
+    return this.getFetcher().delete(
+      `${this._getBaseUrl()}/restapis/${restapiId}`
+    ).then(response => null);
+  }
+
+  /**
    * @return {Fetcher}
    */
   getFetcher() {

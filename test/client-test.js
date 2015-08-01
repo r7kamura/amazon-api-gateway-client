@@ -13,7 +13,11 @@ describe('Client', () => {
 
   describe('#createResource', () => {
     it('does not raise any error', (done) => {
-      client.createResource({ parentId: 'a', pathPart: 'b', restapiId: 'c' }).then((resource) => {
+      client.createResource({
+        parentId: 'parentId',
+        pathPart: 'pathPart',
+        restapiId: 'restapiId'
+      }).then((resource) => {
         done();
       });
     });
@@ -21,7 +25,9 @@ describe('Client', () => {
 
   describe('#createRestapi', () => {
     it('does not raise any error', (done) => {
-      client.createRestapi({ name: 'a' }).then((restapi) => {
+      client.createRestapi({
+        name: 'name'
+      }).then((restapi) => {
         done();
       });
     });
@@ -29,7 +35,20 @@ describe('Client', () => {
 
   describe('#deleteModel', () => {
     it('does not raise any error', (done) => {
-      client.deleteModel({ modelName: 'a', restapiId: 'b' }).then(() => {
+      client.deleteModel({
+        modelName: 'modelName',
+        restapiId: 'restapiId'
+      }).then(() => {
+        done();
+      });
+    });
+  });
+
+  describe('#deleteRestapi', () => {
+    it('does not raise any error', (done) => {
+      client.deleteRestapi({
+        restapiId: 'restapiId'
+      }).then(() => {
         done();
       });
     });
@@ -37,7 +56,9 @@ describe('Client', () => {
 
   describe('#listResources', function() {
     it('does not raise any error', (done) => {
-      client.listResources({ restapiId: 'a' }).catch((error) => {
+      client.listResources({
+        restapiId: 'restapiId'
+      }).catch((error) => {
         done();
       });
     });
