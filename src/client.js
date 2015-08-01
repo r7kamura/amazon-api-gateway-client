@@ -22,14 +22,7 @@ import Restapi from './restapi'
     */
     getFetcher() {
       if (!this._fetcher) {
-        this._fetcher = new Fetcher().use(
-          AwsSignerV4,
-          {
-            accessKeyId: this.accessKeyId,
-            region: this.region,
-            secretAccessKey: this.secretAccessKey
-          }
-        );
+        this._fetcher = this._buildFetcher();
       }
       return this._fetcher;
     }
@@ -46,6 +39,20 @@ import Restapi from './restapi'
            return new Restapi(element);
          });
        });
+   }
+
+   /**
+    * @return [Fetcher]
+    */
+   _buildFetcher() {
+     return new Fetcher().use(
+       AwsSignerV4,
+       {
+         accessKeyId: this.accessKeyId,
+         region: this.region,
+         secretAccessKey: this.secretAccessKey
+       }
+     );
    }
 
    /**
