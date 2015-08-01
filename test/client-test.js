@@ -29,7 +29,7 @@ describe('Client', () => {
 
   describe('#deleteModel', () => {
     it('does not raise any error', (done) => {
-      client.deleteModel({ modelName: 'a', restapiId: 'b' }).then((model) => {
+      client.deleteModel({ modelName: 'a', restapiId: 'b' }).then(() => {
         done();
       });
     });
@@ -57,7 +57,7 @@ describe('Client', () => {
         httpMethod: 'httpMethod',
         resourceId: 'resourceId',
         restapiId: 'restapiId',
-      }).then((restapis) => {
+      }).then((method) => {
         done();
       });
     });
