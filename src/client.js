@@ -19,7 +19,7 @@ export class Client {
 
   /**
    * @param {String} name
-   * @return {Restapi}
+   * @return {Promise}
    */
   createRestapi({ name }) {
     return this.getFetcher().post(`${this._getBaseUrl()}/restapis`, { name: name })
