@@ -16,7 +16,7 @@ var client = new Client({
   secretAccessKey: '...'
 });
 
-client.createRestapi({ name: 'MyRestapi' }).then(function (restapis) {
+client.createRestapi({ name: 'MyRestapi' }).then(function (restapi) {
   // ...
 });
 
