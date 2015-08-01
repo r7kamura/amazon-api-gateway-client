@@ -18,10 +18,27 @@ import Restapi from './restapi'
    }
 
    /**
+    * @return {Fetcher}
+    */
+    getFetcher() {
+      if (!this._fetcher) {
+        this._fetcher = new Fetcher().use(
+          AwsSignerV4,
+          {
+            accessKeyId: this.accessKeyId,
+            region: this.region,
+            secretAccessKey: this.secretAccessKey
+          }
+        );
+      }
+      return this._fetcher;
+    }
+
+   /**
     * @return {Promise}
     */
    listRestapis() {
-     return this._getFetcher().get(`${this._getBaseUrl()}/restapis`)
+     return this.getFetcher().get(`${this._getBaseUrl()}/restapis`)
        .then((response) => {
          return response.json();
        }).then((source) => {
@@ -37,21 +54,4 @@ import Restapi from './restapi'
    _getBaseUrl() {
      return `https://apigateway.${this.region}.amazonaws.com`;
    }
-
-   /**
-    * @return {Fetcher}
-    */
-    _getFetcher() {
-      if (!this._fetcher) {
-        this._fetcher = new Fetcher().use(
-          AwsSignerV4,
-          {
-            accessKeyId: this.accessKeyId,
-            region: this.region,
-            secretAccessKey: this.secretAccessKey
-          }
-        );
-      }
-      return this._fetcher;
-    }
  }
