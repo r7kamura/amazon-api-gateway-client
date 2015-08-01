@@ -11,6 +11,10 @@ var client = new Client({
   secretAccessKey: '...'
 });
 
+client.createRestapi({ name: 'MyRestapi' }).then(function (restapis) {
+  // ...
+});
+
 client.listRestapis().then(function (restapis) {
   // ...
 });
