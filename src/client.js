@@ -1,6 +1,6 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
 import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'stackable-fetcher'
-import Model from './resource'
+import Model from './model'
 import Resource from './resource'
 import Restapi from './restapi'
 
