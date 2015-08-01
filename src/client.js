@@ -107,7 +107,7 @@ export class Client {
   }
 
   /**
-   * @return [Fetcher]
+   * @return {Fetcher}
    */
   _buildFetcher() {
     return new Fetcher()
