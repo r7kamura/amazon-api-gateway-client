@@ -20,6 +20,13 @@ client.listRestapis().then(function (restapis) {
 });
 ```
 
+## API
+- `new Client()`
+- `client.createResources({ parentId, pathPart, restapiId, }) -> Promise`
+- `client.createRestapi({ name }) -> Promise`
+- `client.listResources({ restapiId }) -> Promise`
+- `client.listRestapis() -> Promise`
+
 ## Development
 ```
 npm install
