@@ -1,5 +1,6 @@
-import Fetcher from 'stackable-fetcher'
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
+import Fetcher from 'stackable-fetcher'
+import Restapi from './restapi'
 
 /**
  * @class Client
@@ -20,7 +21,14 @@ import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
     * @return {Promise}
     */
    listRestapis() {
-     return this._getFetcher().get(`${this._getBaseUrl()}/restapis`);
+     return this._getFetcher().get(`${this._getBaseUrl()}/restapis`)
+       .then((response) => {
+         return response.json();
+       }).then((source) => {
+         return source.item.map((element) => {
+           return new Restapi(element);
+         });
+       });
    }
 
    /**
