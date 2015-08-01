@@ -25,9 +25,9 @@ describe('Client', () => {
     });
   });
 
-  describe('#listResources', () => {
+  describe('#listResources', function() {
     it('does not raise any error', (done) => {
-      client.listResources({ restapiId: 'a' }).then((resources) => {
+      client.listResources({ restapiId: 'a' }).catch((error) => {
         done();
       });
     });

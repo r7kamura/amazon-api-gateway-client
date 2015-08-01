@@ -1,5 +1,5 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
-import { Fetcher, JsonRequestEncoder } from 'stackable-fetcher'
+import { Fetcher, JsonRequestEncoder, JsonResponseDecoder } from 'stackable-fetcher'
 import Resource from './resource'
 import Restapi from './restapi'
 
@@ -25,15 +25,10 @@ export class Client {
    * @return {Promise}
    */
   createResource({ parentId, pathPart, restapiId }) {
-    return this.getFetcher()
-      .post(
-        `${this._getBaseUrl()}/restapis/${restapiId}/resources/${parentId}`,
-        { pathPart: pathPart }
-      ).then((response) => {
-        return response.json();
-      }).then((body) => {
-        return new Resource(body);
-      });
+    return this.getFetcher().post(
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources/${parentId}`,
+      { pathPart: pathPart }
+    ).then(body => new Resource(body));
   }
 
   /**
@@ -41,12 +36,10 @@ export class Client {
    * @return {Promise}
    */
   createRestapi({ name }) {
-    return this.getFetcher().post(`${this._getBaseUrl()}/restapis`, { name: name })
-      .then((response) => {
-        return response.json();
-      }).then((body) => {
-        return new Restapi(body);
-      });
+    return this.getFetcher().post(
+      `${this._getBaseUrl()}/restapis`,
+      { name: name }
+    ).then(body => new Restapi(body));
   }
 
   /**
@@ -64,28 +57,18 @@ export class Client {
    * @return {Promise}
    */
   listResources({ restapiId }) {
-    return this.getFetcher().get(`${this._getBaseUrl()}/restapis/${restapiId}/resources`)
-      .then((response) => {
-        return response.json();
-      }).then((body) => {
-        return body.item.map((source) => {
-          return new Resource(source);
-        });
-      });
+    return this.getFetcher().get(
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources`
+    ).then(body => body.item.map(source => new Resource(source)));
   }
 
   /**
    * @return {Promise}
    */
   listRestapis() {
-    return this.getFetcher().get(`${this._getBaseUrl()}/restapis`)
-      .then((response) => {
-        return response.json();
-      }).then((body) => {
-        return body.item.map((source) => {
-          return new Restapi(source);
-        });
-      });
+    return this.getFetcher().get(
+      `${this._getBaseUrl()}/restapis`
+    ).then(body => body.item.map(source => new Restapi(source)));
   }
 
   /**
@@ -101,7 +84,8 @@ export class Client {
           region: this.region,
           secretAccessKey: this.secretAccessKey
         }
-      );
+      )
+      .use(JsonResponseDecoder);
   }
 
   /**
