@@ -26,7 +26,7 @@ client.listRestapis().then(function (restapis) {
 ```
 
 ## API
-- `new Client()`
+- `new Client({ accessKeyId, region, secretAccessKey })`
 - `client.createResources({ parentId, pathPart, restapiId, }) -> Promise`
 - `client.createRestapi({ name }) -> Promise`
 - `client.listResources({ restapiId }) -> Promise`
