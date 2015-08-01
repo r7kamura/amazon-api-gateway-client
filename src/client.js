@@ -1,5 +1,6 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
 import { Fetcher, JsonRequestEncoder } from 'stackable-fetcher'
+import Resource from './resource'
 import Restapi from './restapi'
 
 /**
@@ -18,6 +19,24 @@ export class Client {
   }
 
   /**
+   * @param {String} parentId
+   * @param {String} pathPart
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  createResource({ parentId, pathPart, restapiId }) {
+    return this.getFetcher()
+      .post(
+        `${this._getBaseUrl()}/restapis/${restapiId}/resources/${parentId}`,
+        { pathPart: pathPart }
+      ).then((response) => {
+        return response.json();
+      }).then((body) => {
+        return new Resource(body);
+      });
+  }
+
+  /**
    * @param {String} name
    * @return {Promise}
    */
@@ -25,8 +44,8 @@ export class Client {
     return this.getFetcher().post(`${this._getBaseUrl()}/restapis`, { name: name })
       .then((response) => {
         return response.json();
-      }).then((source) => {
-        return new Restapi(source);
+      }).then((body) => {
+        return new Restapi(body);
       });
   }
 
@@ -41,15 +60,30 @@ export class Client {
   }
 
   /**
+   * @param {restapiId}
+   * @return {Promise}
+   */
+  listResources({ restapiId }) {
+    return this.getFetcher().get(`${this._getBaseUrl()}/restapis/${restapiId}/resources`)
+      .then((response) => {
+        return response.json();
+      }).then((body) => {
+        return body.item.map((source) => {
+          return new Resource(source);
+        });
+      });
+  }
+
+  /**
    * @return {Promise}
    */
   listRestapis() {
     return this.getFetcher().get(`${this._getBaseUrl()}/restapis`)
       .then((response) => {
         return response.json();
-      }).then((source) => {
-        return source.item.map((element) => {
-          return new Restapi(element);
+      }).then((body) => {
+        return body.item.map((source) => {
+          return new Restapi(source);
         });
       });
   }
