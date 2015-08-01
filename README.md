@@ -29,6 +29,7 @@ client.listRestapis().then(function (restapis) {
 - `new Client({ accessKeyId, region, secretAccessKey })`
 - `client.createResources({ parentId, pathPart, restapiId, }) -> Promise`
 - `client.createRestapi({ name }) -> Promise`
+- `client.deleteModel({ modelName, restapiId }) -> Promise`
 - `client.listResources({ restapiId }) -> Promise`
 - `client.listRestapis() -> Promise`
 

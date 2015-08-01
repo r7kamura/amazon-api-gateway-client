@@ -1,5 +1,5 @@
 import { Client } from '../src/index.js'
-import { RejectLogger, RequestLogger, ResponseLogger } from 'stackable-fetcher'
+import { RequestLogger, ResponseLogger } from 'stackable-fetcher'
 
 describe('Client', () => {
   let client = new Client({
@@ -8,7 +8,6 @@ describe('Client', () => {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
   });
   client.getFetcher()
-    .use(RejectLogger)
     .use(RequestLogger)
     .use(ResponseLogger);
 
@@ -23,6 +22,14 @@ describe('Client', () => {
   describe('#createRestapi', () => {
     it('does not raise any error', (done) => {
       client.createRestapi({ name: 'a' }).then((restapi) => {
+        done();
+      });
+    });
+  });
+
+  describe('#deleteModel', () => {
+    it('does not raise any error', (done) => {
+      client.deleteModel({ modelName: 'a', restapiId: 'b' }).then((model) => {
         done();
       });
     });

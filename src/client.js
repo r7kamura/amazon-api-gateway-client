@@ -1,5 +1,6 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
-import { Fetcher, JsonRequestEncoder, JsonResponseDecoder } from 'stackable-fetcher'
+import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'stackable-fetcher'
+import Model from './resource'
 import Resource from './resource'
 import Restapi from './restapi'
 
@@ -43,6 +44,17 @@ export class Client {
   }
 
   /**
+   * @param {String} modelName
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  deleteModel({ modelName, restapiId }) {
+    return this.getFetcher().delete(
+      `${this._getBaseUrl()}/restapis/${restapiId}/models/${modelName}`
+    ).then(response => null);
+  }
+
+  /**
    * @return {Fetcher}
    */
   getFetcher() {
@@ -76,6 +88,7 @@ export class Client {
    */
   _buildFetcher() {
     return new Fetcher()
+      .use(RejectLogger)
       .use(JsonRequestEncoder)
       .use(
         AwsSignerV4,
