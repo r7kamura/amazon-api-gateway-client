@@ -1,5 +1,6 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
 import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'stackable-fetcher'
+import Method from './method'
 import Model from './model'
 import Resource from './resource'
 import Restapi from './restapi'
@@ -65,7 +66,7 @@ export class Client {
   }
 
   /**
-   * @param {restapiId}
+   * @param {String} restapiId
    * @return {Promise}
    */
   listResources({ restapiId }) {
@@ -81,6 +82,28 @@ export class Client {
     return this.getFetcher().get(
       `${this._getBaseUrl()}/restapis`
     ).then(body => body.item.map(source => new Restapi(source)));
+  }
+
+  /**
+   * @param {Boolean} apiKeyRequired
+   * @param {String=} authorizationType
+   * @param {String} httpMethod
+   * @param {Object=} requestModels
+   * @param {Object=} requestParameters
+   * @param {String} resourceId
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  putMethod({ apiKeyRequired, authorizationType, httpMethod, requestModels, requestParameters, resourceId, restapiId }) {
+    return this.getFetcher().put(
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources/${resourceId}/methods/${httpMethod}`,
+      {
+        apiKeyRequired: apiKeyRequired || false,
+        authorizationType: authorizationType || 'NONE',
+        requestModels: requestModels || {},
+        requestParameters: requestParameters || {}
+      }
+    ).then(body => new Method(body));
   }
 
   /**

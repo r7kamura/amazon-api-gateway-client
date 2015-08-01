@@ -50,4 +50,16 @@ describe('Client', () => {
       });
     });
   });
+
+  describe('#putMethod', () => {
+    it('does not raise any error', (done) => {
+      client.putMethod({
+        httpMethod: 'httpMethod',
+        resourceId: 'resourceId',
+        restapiId: 'restapiId',
+      }).then((restapis) => {
+        done();
+      });
+    });
+  });
 });
