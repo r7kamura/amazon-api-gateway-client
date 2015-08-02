@@ -34,6 +34,21 @@ export class Client {
   }
 
   /**
+   * @param {Array.<String>} paths
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  createResources({ paths, restapiId }) {
+    return this.getRootResource({ restapiId: restapiId }).then((rootResource) => {
+      return this._createResourcesByPaths({
+        paths: paths,
+        restapiId: restapiId,
+        rootResourceId: rootResource.source.id
+      });
+    });
+  }
+
+  /**
    * @param {String} name
    * @return {Promise}
    */
@@ -149,6 +164,54 @@ export class Client {
         }
       )
       .use(JsonResponseDecoder);
+  }
+
+  /**
+   * @param {String} parentId
+   * @param {Array.<String>} pathParts
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  _createChildResources({ parentId, pathParts, restapiId }) {
+    if (pathParts.length > 0) {
+      return this.createResource({
+        parentId: parentId,
+        pathPart: pathParts[0],
+        restapiId: restapiId
+      }).then((resource) => {
+        return this._createChildResources({
+          parentId: resource.source.id,
+          pathParts: pathParts.slice(1),
+          restapiId: restapiId
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * @param {Array.<String>} paths
+   * @param {String} restapiId
+   * @param {String} rootResourceId
+   * @return {Promise}
+   */
+  _createResourcesByPaths({ paths, restapiId, rootResourceId }) {
+    if (paths.length > 0) {
+      return this._createChildResources({
+        parentId: rootResourceId,
+        pathParts: paths[0].split('/').slice(1),
+        restapiId: restapiId
+      }).then(() => {
+        return this._createResourcesByPaths({
+          paths: paths.slice(1),
+          restapiId: restapiId,
+          rootResourceId: rootResourceId
+        });
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   /**
