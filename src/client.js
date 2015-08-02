@@ -90,7 +90,6 @@ export default class Client {
    * @return {Promise}
    */
   findResourceByPath({ path, restapiId }) {
-    console.log({ path: path });
     return this.listResources({
       restapiId: restapiId
     }).then((resources) => {
