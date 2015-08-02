@@ -1,5 +1,6 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
 import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'stackable-fetcher'
+import Integration from './integration'
 import Method from './method'
 import Model from './model'
 import path from 'path'
@@ -147,6 +148,36 @@ export default class Client {
     return this.getFetcher().get(
       `${this._getBaseUrl()}/restapis`
     ).then(body => body.item.map(source => new Restapi(source)));
+  }
+
+  /**
+   * @param {Array.<String>=} cacheKeyParameters
+   * @param {String=} cacheNamespace
+   * @param {Boolean=} credentials
+   * @param {String} httpMethod
+   * @param {String=} integrationHttpMethod
+   * @param {Object=} requestParameters
+   * @param {Object=} requestTemplates
+   * @param {String} resourceId
+   * @param {String} restapiId
+   * @param {String} type
+   * @param {String=} uri
+   * @return {Promise}
+   */
+  putIntegration({ cacheKeyParameters, cacheNamespace, credentials, httpMethod, integrationHttpMethod, requestParameters, requestTemplates, resourceId, restapiId, type, uri }) {
+    return this.getFetcher().put(
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources/${resourceId}/methods/${httpMethod}/integration`,
+      {
+         cacheKeyParameters: cacheKeyParameters,
+         cacheNamespace: cacheNamespace,
+         credentials: credentials,
+         httpMethod: integrationHttpMethod,
+         requestParameters: requestParameters,
+         requestTemplates: requestTemplates,
+         type: type,
+         uri: uri,
+      }
+    ).then(body => new Integration(body));
   }
 
   /**

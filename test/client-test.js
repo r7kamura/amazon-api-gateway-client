@@ -135,6 +135,29 @@ describe('Client', () => {
     });
   });
 
+  describe('#putIntegration', () => {
+    it('does not raise any error', (done) => {
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).putMethod({
+        httpMethod: 'GET',
+        integrationHttpMethod: 'GET',
+        resourceId: 'resourceId',
+        restapiId: 'restapiId',
+        type: 'HTTP',
+        url: 'http://example.com'
+      }).then((method) => {
+        done();
+      });
+    });
+  });
+
   describe('#putMethod', () => {
     it('does not raise any error', (done) => {
       client.use(
@@ -148,7 +171,7 @@ describe('Client', () => {
       ).putMethod({
         httpMethod: 'httpMethod',
         resourceId: 'resourceId',
-        restapiId: 'restapiId',
+        restapiId: 'restapiId'
       }).then((method) => {
         done();
       });
