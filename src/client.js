@@ -9,7 +9,7 @@ import Restapi from './restapi'
 /**
  * @class Client
  */
-export class Client {
+export default class Client {
   /**
    * @param {String} accessKeyId
    * @param {String} region
