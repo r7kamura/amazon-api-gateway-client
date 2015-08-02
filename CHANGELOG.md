@@ -1,3 +1,9 @@
+## v0.0.4
+- Add Client#createResources
+- Add Client#deleteRestapi
+- Add Client#getRootResources
+- Add Client#putMethod
+
 ## v0.0.3
 - Rebuild lib dir
 
