@@ -2,6 +2,7 @@ import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
 import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'stackable-fetcher'
 import Method from './method'
 import Model from './model'
+import path from 'path'
 import Resource from './resource'
 import Restapi from './restapi'
 
@@ -43,7 +44,7 @@ export class Client {
       return this._createResourcesByPaths({
         paths: paths,
         restapiId: restapiId,
-        rootResourceId: rootResource.source.id
+        rootResource: rootResource
       });
     });
   }
@@ -78,6 +79,27 @@ export class Client {
     return this.getFetcher().delete(
       `${this._getBaseUrl()}/restapis/${restapiId}`
     ).then(response => null);
+  }
+
+  /**
+   * @todo Use Array.prototype.find polyfill instead of forEach
+   * @param {String} path
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  findResourceByPath({ path, restapiId }) {
+    console.log({ path: path });
+    return this.listResources({
+      restapiId: restapiId
+    }).then((resources) => {
+      let matchedResource;
+      resources.forEach((resource) => {
+        if (resource.source.path === path) {
+          matchedResource = resource;
+        }
+      });
+      return matchedResource;
+    });
   }
 
   /**
@@ -167,20 +189,25 @@ export class Client {
   }
 
   /**
-   * @param {String} parentId
+   * @param {Resource} parentResource
    * @param {Array.<String>} pathParts
    * @param {String} restapiId
    * @return {Promise}
    */
-  _createChildResources({ parentId, pathParts, restapiId }) {
+  _createChildResources({ parentResource, pathParts, restapiId }) {
     if (pathParts.length > 0) {
-      return this.createResource({
-        parentId: parentId,
-        pathPart: pathParts[0],
+      return this.findResourceByPath({
+        path: path.join(parentResource.source.path, pathParts[0]),
         restapiId: restapiId
       }).then((resource) => {
+        return resource || this.createResource({
+          parentId: parentResource.source.id,
+          pathPart: pathParts[0],
+          restapiId: restapiId
+        });
+      }).then((resource) => {
         return this._createChildResources({
-          parentId: resource.source.id,
+          parentResource: resource,
           pathParts: pathParts.slice(1),
           restapiId: restapiId
         });
@@ -193,20 +220,20 @@ export class Client {
   /**
    * @param {Array.<String>} paths
    * @param {String} restapiId
-   * @param {String} rootResourceId
+   * @param {Resource} rootResource
    * @return {Promise}
    */
-  _createResourcesByPaths({ paths, restapiId, rootResourceId }) {
+  _createResourcesByPaths({ paths, restapiId, rootResource }) {
     if (paths.length > 0) {
       return this._createChildResources({
-        parentId: rootResourceId,
+        parentResource: rootResource,
         pathParts: paths[0].split('/').slice(1),
         restapiId: restapiId
       }).then(() => {
         return this._createResourcesByPaths({
           paths: paths.slice(1),
           restapiId: restapiId,
-          rootResourceId: rootResourceId
+          rootResource: rootResource
         });
       });
     } else {
