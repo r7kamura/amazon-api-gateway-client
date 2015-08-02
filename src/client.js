@@ -12,11 +12,13 @@ import Restapi from './restapi'
 export default class Client {
   /**
    * @param {String} accessKeyId
+   * @param {Fetcher} fetcher
    * @param {String} region
    * @param {String} secretAccessKey
    */
-  constructor({ accessKeyId, region, secretAccessKey }) {
+  constructor({ accessKeyId, fetcher, region, secretAccessKey }) {
     this.accessKeyId = accessKeyId;
+    this._fetcher = fetcher;
     this.region = region;
     this.secretAccessKey = secretAccessKey;
   }
@@ -168,6 +170,20 @@ export default class Client {
         requestParameters: requestParameters || {}
       }
     ).then(body => new Method(body));
+  }
+
+  /**
+   * @param {Function} middleware
+   * @param {Object=} options
+   * @return {Client}
+   */
+  use(middleware, options) {
+    return new this.constructor({
+      accessKeyId: this.accessKeyId,
+      fetcher: this.getFetcher().use(middleware, options),
+      region: this.region,
+      secretAccessKey: this.secretAccessKey
+    });
   }
 
   /**

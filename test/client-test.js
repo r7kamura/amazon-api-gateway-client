@@ -8,19 +8,17 @@ describe('Client', () => {
     secretAccessKey: 'secretAccessKey',
   });
 
-  client.getFetcher().use(
-    Mock,
-    {
-      body: JSON.stringify({ item: [] }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-  );
-
   describe('#createResource', () => {
     it('does not raise any error', (done) => {
-      client.createResource({
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).createResource({
         parentId: 'parentId',
         pathPart: 'pathPart',
         restapiId: 'restapiId'
@@ -32,7 +30,15 @@ describe('Client', () => {
 
   describe('#createRestapi', () => {
     it('does not raise any error', (done) => {
-      client.createRestapi({
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).createRestapi({
         name: 'name'
       }).then((restapi) => {
         done();
@@ -42,7 +48,15 @@ describe('Client', () => {
 
   describe('#deleteModel', () => {
     it('does not raise any error', (done) => {
-      client.deleteModel({
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).deleteModel({
         modelName: 'modelName',
         restapiId: 'restapiId'
       }).then(() => {
@@ -53,7 +67,15 @@ describe('Client', () => {
 
   describe('#deleteRestapi', () => {
     it('does not raise any error', (done) => {
-      client.deleteRestapi({
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).deleteRestapi({
         restapiId: 'restapiId'
       }).then(() => {
         done();
@@ -63,7 +85,15 @@ describe('Client', () => {
 
   describe('#getRootResource', () => {
     it('does not raise any error', (done) => {
-      client.getRootResource({
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({ item: [] }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).getRootResource({
         restapiId: 'restapiId'
       }).then(() => {
         done();
@@ -73,7 +103,15 @@ describe('Client', () => {
 
   describe('#listResources', function() {
     it('does not raise any error', (done) => {
-      client.listResources({
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({ item: [] }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).listResources({
         restapiId: 'restapiId'
       }).then((error) => {
         done();
@@ -83,7 +121,15 @@ describe('Client', () => {
 
   describe('#listRestapis', () => {
     it('does not raise any error', (done) => {
-      client.listRestapis().then((restapis) => {
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({ item: [] }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).listRestapis().then((restapis) => {
         done();
       });
     });
@@ -91,7 +137,15 @@ describe('Client', () => {
 
   describe('#putMethod', () => {
     it('does not raise any error', (done) => {
-      client.putMethod({
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).putMethod({
         httpMethod: 'httpMethod',
         resourceId: 'resourceId',
         restapiId: 'restapiId',
