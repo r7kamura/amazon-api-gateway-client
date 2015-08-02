@@ -1,3 +1,6 @@
+## v0.0.5
+- Add Client#putIntegration
+
 ## v0.0.4
 - Add Client#createResources
 - Add Client#deleteRestapi
