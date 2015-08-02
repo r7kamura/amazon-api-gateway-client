@@ -150,7 +150,7 @@ export default class Client {
   }
 
   /**
-   * @param {Boolean} apiKeyRequired
+   * @param {Boolean=} apiKeyRequired
    * @param {String=} authorizationType
    * @param {String} httpMethod
    * @param {Object=} requestModels
