@@ -76,6 +76,23 @@ export class Client {
   }
 
   /**
+   * @todo Use Array.prototype.find polyfill instead of forEach
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  getRootResource({ restapiId }) {
+    return this.listResources({ restapiId: restapiId }).then((resources) => {
+      let rootResource;
+      resources.forEach((resource) => {
+        if (resource.source.path === '/') {
+          rootResource = resource;
+        }
+      });
+      return rootResource;
+    });
+  }
+
+  /**
    * @param {String} restapiId
    * @return {Promise}
    */

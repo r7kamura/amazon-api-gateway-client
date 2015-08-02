@@ -61,6 +61,16 @@ describe('Client', () => {
     });
   });
 
+  describe('#getRootResource', () => {
+    it('does not raise any error', (done) => {
+      client.getRootResource({
+        restapiId: 'restapiId'
+      }).then(() => {
+        done();
+      });
+    });
+  });
+
   describe('#listResources', function() {
     it('does not raise any error', (done) => {
       client.listResources({
