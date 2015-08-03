@@ -8,6 +8,25 @@ describe('Client', () => {
     secretAccessKey: 'secretAccessKey',
   });
 
+  describe('#createDeployment', () => {
+    it('does not raise any error', (done) => {
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).createDeployment({
+        restapiId: 'restapiId',
+        stageName: 'production'
+      }).then((resource) => {
+        done();
+      });
+    });
+  });
+
   describe('#createResource', () => {
     it('does not raise any error', (done) => {
       client.use(

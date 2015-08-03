@@ -1,5 +1,6 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
 import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'stackable-fetcher'
+import Deployment from './deployment'
 import Integration from './integration'
 import IntegrationResponse from './integration-response'
 import Method from './method'
@@ -24,6 +25,28 @@ export default class Client {
     this._fetcher = fetcher;
     this.region = region;
     this.secretAccessKey = secretAccessKey;
+  }
+
+  /**
+   * @param {Boolean=} cacheClusterEnabled
+   * @param {Integer=} cacheClusterSize
+   * @param {String=} description
+   * @param {String} restapiId
+   * @param {String} stageDescription
+   * @param {String} stageName
+   * @return {Promise}
+   */
+  createDeployment({ cacheClusterEnabled, cacheClusterSize, description, restapiId, stageDescription, stageName }) {
+    return this.getFetcher().post(
+      `${this._getBaseUrl()}/restapis/${restapiId}/deployments`,
+      {
+        cacheClusterEnabled: cacheClusterEnabled,
+        cacheClusterSize: cacheClusterSize,
+        description: description,
+        stageDescription: stageDescription,
+        stageName: stageName
+      }
+    ).then(body => new Deployment(body));
   }
 
   /**
