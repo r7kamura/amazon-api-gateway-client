@@ -158,6 +158,27 @@ describe('Client', () => {
     });
   });
 
+  describe('#putIntegrationResponse', () => {
+    it('does not raise any error', (done) => {
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).putIntegrationResponse({
+        httpMethod: 'GET',
+        resourceId: 'resourceId',
+        restapiId: 'restapiId',
+        statusCode: 200
+      }).then((method) => {
+        done();
+      });
+    });
+  });
+
   describe('#putMethod', () => {
     it('does not raise any error', (done) => {
       client.use(

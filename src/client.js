@@ -1,6 +1,7 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
 import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'stackable-fetcher'
 import Integration from './integration'
+import IntegrationResponse from './integration-response'
 import Method from './method'
 import Model from './model'
 import path from 'path'
@@ -178,6 +179,27 @@ export default class Client {
          uri: uri,
       }
     ).then(body => new Integration(body));
+  }
+
+  /**
+   * @param {String} httpMethod
+   * @param {String} resourceId
+   * @param {Object=} responseParameters
+   * @param {Object=} responseTemplates
+   * @param {String} restapiId
+   * @param {Object=} selectionPattern
+   * @param {Integer} statusCode
+   * @return {Promise}
+   */
+  putIntegrationResponse({ httpMethod, resourceId, responseParameters, responseTemplates, restapiId, selectionPattern, statusCode }) {
+    return this.getFetcher().put(
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources/${resourceId}/methods/${httpMethod}/integration/responses/${statusCode}`,
+      {
+        selectionPattern: selectionPattern,
+        responseParameters: responseParameters,
+        responseTemplates: responseTemplates
+      }
+    ).then(body => new IntegrationResponse(body));
   }
 
   /**
