@@ -1,3 +1,8 @@
+## v0.1.0
+- Add Client#createDeployment
+- Add Client#putMethodResponse
+- Add Client#putIntegrationResponse
+
 ## v0.0.5
 - Add Client#putIntegration
 
