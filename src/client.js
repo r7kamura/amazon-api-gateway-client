@@ -3,6 +3,7 @@ import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from '
 import Integration from './integration'
 import IntegrationResponse from './integration-response'
 import Method from './method'
+import MethodResponse from './method-response'
 import Model from './model'
 import path from 'path'
 import Resource from './resource'
@@ -222,6 +223,23 @@ export default class Client {
         requestParameters: requestParameters || {}
       }
     ).then(body => new Method(body));
+  }
+
+  /**
+   * @param {String} httpMethod
+   * @param {String} resourceId
+   * @param {Object=} responseModels
+   * @param {Object=} responseParameters
+   * @param {String} restapiId
+   * @param {Integer} statusCode
+   * @return {Promise}
+   */
+  putMethodResponse({ httpMethod, resourceId, responseModels, responseParameters, restapiId, statusCode }) {
+    return this.getFetcher().put(
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources/${resourceId}/methods/${httpMethod}/responses/${statusCode}`,
+      {
+      }
+    ).then(body => new MethodResponse(body));
   }
 
   /**

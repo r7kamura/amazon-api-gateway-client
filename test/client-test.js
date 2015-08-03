@@ -190,9 +190,30 @@ describe('Client', () => {
           }
         }
       ).putMethod({
-        httpMethod: 'httpMethod',
+        httpMethod: 'GET',
         resourceId: 'resourceId',
         restapiId: 'restapiId'
+      }).then((method) => {
+        done();
+      });
+    });
+  });
+
+  describe('#putMethodResponse', () => {
+    it('does not raise any error', (done) => {
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).putMethod({
+        httpMethod: 'GET',
+        resourceId: 'resourceId',
+        restapiId: 'restapiId',
+        statusCode: 200
       }).then((method) => {
         done();
       });
