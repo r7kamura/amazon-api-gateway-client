@@ -28,7 +28,7 @@ client.listRestapis().then(function (restapis) {
 ## API
 - `new Client({ accessKeyId, region, secretAccessKey })`
 - `createDeployment({ cacheClusterEnabled, cacheClusterSize, description, restapiId, stageDescription, stageName }) -> Promise`
-- `client.createResources({ parentId, pathPart, restapiId, }) -> Promise`
+- `client.createResources({ paths, restapiId, }) -> Promise`
 - `client.createRestapi({ name }) -> Promise`
 - `client.deleteModel({ modelName, restapiId }) -> Promise`
 - `deleteRestapi({ restapiId }) -> Promise`
