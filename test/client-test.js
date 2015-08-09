@@ -122,6 +122,24 @@ describe('Client', () => {
     });
   });
 
+  describe('#getRestapi', () => {
+    it('does not raise any error', (done) => {
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).getRestapi({
+        restapiId: 'restapiId'
+      }).then(() => {
+        done();
+      });
+    });
+  });
+
   describe('#getRootResource', () => {
     it('does not raise any error', (done) => {
       client.use(

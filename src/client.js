@@ -155,6 +155,16 @@ export default class Client {
    * @param {String} restapiId
    * @return {Promise}
    */
+  getRestapi({ restapiId }) {
+    return this.getFetcher().get(
+      `${this._getBaseUrl()}/restapis/${restapiId}`
+    ).then(source => new Restapi(source));
+  }
+
+  /**
+   * @param {String} restapiId
+   * @return {Promise}
+   */
   getRootResource({ restapiId }) {
     return this.findResourceByPath({ path: '/', restapiId: restapiId });
   }
