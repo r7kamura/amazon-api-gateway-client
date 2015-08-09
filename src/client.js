@@ -152,7 +152,6 @@ export default class Client {
   }
 
   /**
-   * @todo Use Array.prototype.find polyfill instead of forEach
    * @param {String} restapiId
    * @return {Promise}
    */
