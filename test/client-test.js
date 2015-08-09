@@ -102,6 +102,26 @@ describe('Client', () => {
     });
   });
 
+  describe('#getMethod', () => {
+    it('does not raise any error', (done) => {
+      client.use(
+        Mock,
+        {
+          body: JSON.stringify({}),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).getMethod({
+        httpMethod: 'GET',
+        resourceId: 'resourceId',
+        restapiId: 'restapiId'
+      }).then(() => {
+        done();
+      });
+    });
+  });
+
   describe('#getRootResource', () => {
     it('does not raise any error', (done) => {
       client.use(

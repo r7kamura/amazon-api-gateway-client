@@ -140,6 +140,18 @@ export default class Client {
   }
 
   /**
+   * @param {String} httpMethod
+   * @param {String} resourceId
+   * @param {String} restapiId
+   * @return {Promise}
+   */
+  getMethod({ httpMethod, resourceId, restapiId }) {
+    return this.getFetcher().get(
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources/${resourceId}/methods/${httpMethod}`
+    ).then(source => new Method(source));
+  }
+
+  /**
    * @todo Use Array.prototype.find polyfill instead of forEach
    * @param {String} restapiId
    * @return {Promise}
