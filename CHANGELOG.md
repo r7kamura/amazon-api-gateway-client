@@ -1,3 +1,7 @@
+## v0.1.1
+- Add Client#getMethod
+- Add Client#getRestapi
+
 ## v0.1.0
 - Add Client#createDeployment
 - Add Client#putMethodResponse
