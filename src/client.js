@@ -274,6 +274,8 @@ export default class Client {
     return this.getFetcher().put(
       `${this._getBaseUrl()}/restapis/${restapiId}/resources/${resourceId}/methods/${httpMethod}/responses/${statusCode}`,
       {
+        responseModels: responseModels || {},
+        responseParameters: responseParameters || {}
       }
     ).then(body => new MethodResponse(body));
   }
