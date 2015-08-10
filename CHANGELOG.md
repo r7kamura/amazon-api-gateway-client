@@ -1,3 +1,6 @@
+## v0.1.2
+- Add more parameters to Client#putMethodResponse (#1)
+
 ## v0.1.1
 - Add Client#getMethod
 - Add Client#getRestapi
