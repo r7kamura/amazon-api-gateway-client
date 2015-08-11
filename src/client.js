@@ -173,6 +173,16 @@ export default class Client {
    * @param {String} restapiId
    * @return {Promise}
    */
+  listDeployments({ restapiId }) {
+    return this.getFetcher().get(
+      `${this._getBaseUrl()}/restapis/${restapiId}/deployments`
+    ).then(body => body.item.map(source => new Deployment(source)));
+  }
+
+  /**
+   * @param {String} restapiId
+   * @return {Promise}
+   */
   listResources({ restapiId }) {
     return this.getFetcher().get(
       `${this._getBaseUrl()}/restapis/${restapiId}/resources`
