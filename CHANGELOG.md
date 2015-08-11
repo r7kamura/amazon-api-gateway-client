@@ -1,3 +1,6 @@
+## v0.1.3
+- Add Client#listDeployments
+
 ## v0.1.2
 - Add more parameters to Client#putMethodResponse (#1)
 
