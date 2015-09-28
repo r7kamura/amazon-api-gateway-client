@@ -9,6 +9,7 @@ import Model from './model'
 import path from 'path'
 import Resource from './resource'
 import Restapi from './restapi'
+import querystring from 'querystring'
 
 /**
  * @class Client
@@ -183,9 +184,11 @@ export default class Client {
    * @param {String} restapiId
    * @return {Promise}
    */
-  listResources({ restapiId }) {
+  listResources({ restapiId, qsParams = {} }) {
+    let qs = querystring.stringify(qsParams);
+
     return this.getFetcher().get(
-      `${this._getBaseUrl()}/restapis/${restapiId}/resources`
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources?${qs}`
     ).then(body => body.item.map(source => new Resource(source)));
   }
 
