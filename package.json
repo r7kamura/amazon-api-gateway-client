@@ -1,8 +1,8 @@
 {
   "license": "MIT",
   "main": "lib/index.js",
-  "name": "amazon-api-gateway-client",
-  "repository": "r7kamura/amazon-api-gateway-client",
+  "name": "aws-api-gw-client",
+  "repository": "mgoria/amazon-api-gateway-client",
   "scripts": {
     "build": "gulp build",
     "test": "gulp test"
@@ -10,7 +10,7 @@
   "files": [
     "lib"
   ],
-  "version": "0.1.3",
+  "version": "0.1.4",
   "devDependencies": {
     "babel": "^5.8.19",
     "gulp-babel": "^5.2.0",
