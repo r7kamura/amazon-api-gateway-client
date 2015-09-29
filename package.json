@@ -10,7 +10,7 @@
   "files": [
     "lib"
   ],
-  "version": "0.1.4",
+  "version": "0.1.5",
   "devDependencies": {
     "babel": "^5.8.19",
     "gulp-babel": "^5.2.0",
@@ -18,7 +18,7 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
-    "stackable-fetcher": "^0.3.0",
+    "mg-stackable-fetcher": "0.4.*",
     "stackable-fetcher-aws-signer-v4": "0.0.1"
   }
 }
