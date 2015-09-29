@@ -117,7 +117,10 @@ export default class Client {
    */
   findResourceByPath({ path, restapiId }) {
     return this.listResources({
-      restapiId: restapiId
+      restapiId: restapiId,
+      qsParams: {
+        limit: 500,
+      }
     }).then((resources) => {
       let matchedResource;
       resources.forEach((resource) => {
@@ -183,9 +186,10 @@ export default class Client {
    * @param {String} restapiId
    * @return {Promise}
    */
-  listResources({ restapiId }) {
+  listResources({ restapiId, qsParams = {} }) {
     return this.getFetcher().get(
-      `${this._getBaseUrl()}/restapis/${restapiId}/resources`
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources`,
+      qsParams
     ).then(body => body.item.map(source => new Resource(source)));
   }
 
