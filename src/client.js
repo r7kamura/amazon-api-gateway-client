@@ -25,6 +25,8 @@ export default class Client {
     this._fetcher = fetcher;
     this.region = region;
     this.secretAccessKey = secretAccessKey;
+
+    this._resources = {};
   }
 
   /**
@@ -59,7 +61,12 @@ export default class Client {
     return this.getFetcher().post(
       `${this._getBaseUrl()}/restapis/${restapiId}/resources/${parentId}`,
       { pathPart: pathPart }
-    ).then(body => new Resource(body));
+    ).then((body) => {
+        let resource = new Resource(body);
+        this._resources[resource.source.path] = resource;
+
+        return resource;
+    });
   }
 
   /**
@@ -85,7 +92,15 @@ export default class Client {
     return this.getFetcher().post(
       `${this._getBaseUrl()}/restapis`,
       { name: name }
-    ).then(body => new Restapi(body));
+    ).then((body) => {
+      let api = new Restapi(body);
+      this._resources[api.source.id] = {};
+
+      console.log('createRestapi - api - ', api);
+      // @todo - add root resource to resources map obj
+
+      return api;
+    });
   }
 
   /**
@@ -110,26 +125,32 @@ export default class Client {
   }
 
   /**
-   * @todo Use Array.prototype.find polyfill instead of forEach
    * @param {String} path
-   * @param {String} restapiId
    * @return {Promise}
    */
-  findResourceByPath({ path, restapiId }) {
-    return this.listResources({
-      restapiId: restapiId,
-      qsParams: {
-        limit: 500,
+  findResourceByPath({path, restapiId}) {
+    if (path !== '/') {
+      let resource = null;
+
+      if (this._resources.hasOwnProperty(restapiId) && this._resources[restapiId].hasOwnProperty(path)) {
+        resource = this._resources[restapiId][path];
       }
-    }).then((resources) => {
-      let matchedResource;
-      resources.forEach((resource) => {
-        if (resource.source.path === path) {
-          matchedResource = resource;
-        }
+
+      Promise.resolve(resource);
+    } else {
+      // @temp
+      return this.listResources({
+        restapiId: restapiId,
+      }).then((resources) => {
+        let matchedResource;
+        resources.forEach((resource) => {
+          if (resource.source.path === path) {
+            matchedResource = resource;
+          }
+        });
+        return matchedResource;
       });
-      return matchedResource;
-    });
+    }
   }
 
   /**
@@ -186,10 +207,9 @@ export default class Client {
    * @param {String} restapiId
    * @return {Promise}
    */
-  listResources({ restapiId, qsParams = {} }) {
+  listResources({ restapiId }) {
     return this.getFetcher().get(
-      `${this._getBaseUrl()}/restapis/${restapiId}/resources`,
-      qsParams
+      `${this._getBaseUrl()}/restapis/${restapiId}/resources`
     ).then(body => body.item.map(source => new Resource(source)));
   }
 
@@ -375,7 +395,7 @@ export default class Client {
         });
       });
     } else {
-      return Promise.resolve();
+      return Promise.resolve(this._resources[restapiId]);
     }
   }
 

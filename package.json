@@ -18,7 +18,7 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
-    "mg-stackable-fetcher": "0.4.*",
+    "stackable-fetcher": "^0.3.0",
     "stackable-fetcher-aws-signer-v4": "0.0.1"
   }
 }
