@@ -1,5 +1,5 @@
 import AwsSignerV4 from 'stackable-fetcher-aws-signer-v4'
-import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'mg-stackable-fetcher'
+import { Fetcher, JsonRequestEncoder, JsonResponseDecoder, RejectLogger } from 'stackable-fetcher'
 import Deployment from './deployment'
 import Integration from './integration'
 import IntegrationResponse from './integration-response'
@@ -63,7 +63,7 @@ export default class Client {
       { pathPart: pathPart }
     ).then((body) => {
         let resource = new Resource(body);
-        this._resources[resource.source.path] = resource;
+        this._storeApiResource(restapiId, resource);
 
         return resource;
     });
@@ -94,10 +94,7 @@ export default class Client {
       { name: name }
     ).then((body) => {
       let api = new Restapi(body);
-      this._resources[api.source.id] = {};
-
-      console.log('createRestapi - api - ', api);
-      // @todo - add root resource to resources map obj
+      this._initResourcesStorageForApi(api.source.id);
 
       return api;
     });
@@ -129,25 +126,25 @@ export default class Client {
    * @return {Promise}
    */
   findResourceByPath({path, restapiId}) {
-    if (path !== '/') {
-      let resource = null;
+    let matchedResource = this._getApiResourceByPath(restapiId, path);
 
-      if (this._resources.hasOwnProperty(restapiId) && this._resources[restapiId].hasOwnProperty(path)) {
-        resource = this._resources[restapiId][path];
-      }
-
-      Promise.resolve(resource);
+    if (matchedResource) {
+      return Promise.resolve(matchedResource);
     } else {
-      // @temp
+      // fetches mainly root resource that is automatically created along with restApi
       return this.listResources({
         restapiId: restapiId,
       }).then((resources) => {
-        let matchedResource;
         resources.forEach((resource) => {
           if (resource.source.path === path) {
             matchedResource = resource;
           }
         });
+
+        if (matchedResource) {
+          this._storeApiResource(restapiId, matchedResource);
+        }
+
         return matchedResource;
       });
     }
@@ -395,7 +392,7 @@ export default class Client {
         });
       });
     } else {
-      return Promise.resolve(this._resources[restapiId]);
+      return Promise.resolve(this._getApiResources(restapiId));
     }
   }
 
@@ -404,5 +401,47 @@ export default class Client {
    */
   _getBaseUrl() {
     return `https://apigateway.${this.region}.amazonaws.com`;
+  }
+
+  /**
+   * @param {String} restapiId
+   * @private
+   */
+  _initResourcesStorageForApi(restapiId) {
+    return this._resources[restapiId] = {};
+  }
+
+  /**
+   * @param {String} restapiId
+   * @param {Resource} resource
+   * @returns {Object}
+   * @private
+   */
+  _storeApiResource(restapiId, resource) {
+    return this._resources[restapiId][resource.source.path] = resource;
+  }
+
+  /**
+   * @param {String} restapiId
+   * @param {String} path
+   * @returns {Resource|null}
+   * @private
+   */
+  _getApiResourceByPath(restapiId, path) {
+    let resource = null;
+    if (this._resources.hasOwnProperty(restapiId) && this._resources[restapiId].hasOwnProperty(path)) {
+      resource = this._resources[restapiId][path];
+    }
+
+    return resource;
+  }
+
+  /**
+   * @param {String} restapiId
+   * @returns {Object}
+   * @private
+   */
+  _getApiResources(restapiId) {
+    return this._resources[restapiId];
   }
 }
