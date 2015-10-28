@@ -1,3 +1,6 @@
+## v0.1.4
+- Follow the change of response body `_embedded` format (#6)
+
 ## v0.1.3
 - Add Client#listDeployments
 
