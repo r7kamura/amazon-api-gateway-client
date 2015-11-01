@@ -25,6 +25,8 @@ export default class Client {
     this._fetcher = fetcher;
     this.region = region;
     this.secretAccessKey = secretAccessKey;
+
+    this._resources = {};
   }
 
   /**
@@ -59,7 +61,12 @@ export default class Client {
     return this.getFetcher().post(
       `${this._getBaseUrl()}/restapis/${restapiId}/resources/${parentId}`,
       { pathPart: pathPart }
-    ).then(body => new Resource(body));
+    ).then((body) => {
+        let resource = new Resource(body);
+        this._storeApiResource(restapiId, resource);
+
+        return resource;
+    });
   }
 
   /**
@@ -85,7 +92,12 @@ export default class Client {
     return this.getFetcher().post(
       `${this._getBaseUrl()}/restapis`,
       { name: name }
-    ).then(body => new Restapi(body));
+    ).then((body) => {
+      let api = new Restapi(body);
+      this._initResourcesStorageForApi(api.source.id);
+
+      return api;
+    });
   }
 
   /**
@@ -110,23 +122,32 @@ export default class Client {
   }
 
   /**
-   * @todo Use Array.prototype.find polyfill instead of forEach
    * @param {String} path
-   * @param {String} restapiId
    * @return {Promise}
    */
-  findResourceByPath({ path, restapiId }) {
-    return this.listResources({
-      restapiId: restapiId
-    }).then((resources) => {
-      let matchedResource;
-      resources.forEach((resource) => {
-        if (resource.source.path === path) {
-          matchedResource = resource;
+  findResourceByPath({path, restapiId}) {
+    let matchedResource = this._getApiResourceByPath(restapiId, path);
+
+    if (matchedResource) {
+      return Promise.resolve(matchedResource);
+    } else {
+      // fetches mainly root resource that is automatically created along with restApi
+      return this.listResources({
+        restapiId: restapiId,
+      }).then((resources) => {
+        resources.forEach((resource) => {
+          if (resource.source.path === path) {
+            matchedResource = resource;
+          }
+        });
+
+        if (matchedResource) {
+          this._storeApiResource(restapiId, matchedResource);
         }
+
+        return matchedResource;
       });
-      return matchedResource;
-    });
+    }
   }
 
   /**
@@ -371,7 +392,7 @@ export default class Client {
         });
       });
     } else {
-      return Promise.resolve();
+      return Promise.resolve(this._getApiResources(restapiId));
     }
   }
 
@@ -380,5 +401,47 @@ export default class Client {
    */
   _getBaseUrl() {
     return `https://apigateway.${this.region}.amazonaws.com`;
+  }
+
+  /**
+   * @param {String} restapiId
+   * @private
+   */
+  _initResourcesStorageForApi(restapiId) {
+    return this._resources[restapiId] = {};
+  }
+
+  /**
+   * @param {String} restapiId
+   * @param {Resource} resource
+   * @returns {Object}
+   * @private
+   */
+  _storeApiResource(restapiId, resource) {
+    return this._resources[restapiId][resource.source.path] = resource;
+  }
+
+  /**
+   * @param {String} restapiId
+   * @param {String} path
+   * @returns {Resource|null}
+   * @private
+   */
+  _getApiResourceByPath(restapiId, path) {
+    let resource = null;
+    if (this._resources.hasOwnProperty(restapiId) && this._resources[restapiId].hasOwnProperty(path)) {
+      resource = this._resources[restapiId][path];
+    }
+
+    return resource;
+  }
+
+  /**
+   * @param {String} restapiId
+   * @returns {Object}
+   * @private
+   */
+  _getApiResources(restapiId) {
+    return this._resources[restapiId];
   }
 }
