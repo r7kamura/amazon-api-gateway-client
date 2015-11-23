@@ -176,7 +176,19 @@ export default class Client {
   listDeployments({ restapiId }) {
     return this.getFetcher().get(
       `${this._getBaseUrl()}/restapis/${restapiId}/deployments`
-    ).then(body => body._embedded.item.map(source => new Deployment(source)));
+    ).then(body => {
+      if (body._embedded && body._embedded.item && Array.isArray(body._embedded.item)) {
+        return body._embedded.item.map(source => new Deployment(source));
+      } else {
+        if (body.message) {
+          return Promise.reject(`${this._getBaseUrl()}/restapis/${restapiId}/` +
+          `deployments failed with this message: ${body.message}`);
+        } else {
+          return Promise.reject(`${this._getBaseUrl()}/restapis/${restapiId}/`
+          `deployments returned unknown response: ${JSON.stringify(body, null, 2)}`);
+        }
+      }
+    });
   }
 
   /**
@@ -207,7 +219,19 @@ export default class Client {
   listRestapis() {
     return this.getFetcher().get(
       `${this._getBaseUrl()}/restapis`
-    ).then(body => body._embedded.item.map(source => new Restapi(source)));
+    ).then(body =>  {
+      if (body._embedded && body._embedded.item && Array.isArray(body._embedded.item)) {
+        return body._embedded.item.map(source => new Restapi(source));
+      } else {
+        if (body.message) {
+          return Promise.reject(`${this._getBaseUrl()}/restapis failed with this ` +
+          `message: ${body.message}`);
+        } else {
+          return Promise.reject(`${this._getBaseUrl()}/restapis returned unknown ` +
+          `response: ${JSON.stringify(body, null, 2)}`);
+        }
+      }
+    });
   }
 
   /**
