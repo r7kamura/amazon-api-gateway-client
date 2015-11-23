@@ -186,7 +186,19 @@ export default class Client {
   listResources({ restapiId }) {
     return this.getFetcher().get(
       `${this._getBaseUrl()}/restapis/${restapiId}/resources`
-    ).then(body => body._embedded.item.map(source => new Resource(source)));
+    ).then(body => {
+      if (body._embedded && body._embedded.item && Array.isArray(body._embedded.item)) {
+        return body._embedded.item.map(source => new Resource(source));
+      } else {
+        if (body.message) {
+          return Promise.reject(`${this._getBaseUrl()}/restapis/${restapiId}/` +
+          `resources failed with this message: ${body.message}`);
+        } else {
+          return Promise.reject(`${this._getBaseUrl()}/restapis/${restapiId}/`
+          `resources returned unknown response: ${JSON.stringify(body, null, 2)}`);
+        }
+      }
+    });
   }
 
   /**

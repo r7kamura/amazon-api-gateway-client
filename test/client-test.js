@@ -23,7 +23,7 @@ describe('Client', () => {
         stageName: 'production'
       }).then((resource) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -43,7 +43,7 @@ describe('Client', () => {
         restapiId: 'restapiId'
       }).then((resource) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -61,7 +61,7 @@ describe('Client', () => {
         name: 'name'
       }).then((restapi) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -80,7 +80,7 @@ describe('Client', () => {
         restapiId: 'restapiId'
       }).then(() => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -98,7 +98,7 @@ describe('Client', () => {
         restapiId: 'restapiId'
       }).then(() => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -118,7 +118,7 @@ describe('Client', () => {
         restapiId: 'restapiId'
       }).then(() => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -136,7 +136,7 @@ describe('Client', () => {
         restapiId: 'restapiId'
       }).then(() => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -145,7 +145,7 @@ describe('Client', () => {
       client.use(
         Mock,
         {
-          body: JSON.stringify({ item: [] }),
+          body: JSON.stringify({ _embedded: { item: [] } }),
           headers: {
             'Content-Type': 'application/json'
           }
@@ -154,7 +154,7 @@ describe('Client', () => {
         restapiId: 'restapiId'
       }).then(() => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -163,7 +163,7 @@ describe('Client', () => {
       client.use(
         Mock,
         {
-          body: JSON.stringify({ item: [] }),
+          body: JSON.stringify({ _embedded: { item: [] } }),
           headers: {
             'Content-Type': 'application/json'
           }
@@ -172,7 +172,7 @@ describe('Client', () => {
         restapiId: 'restapiId'
       }).then((error) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -181,14 +181,14 @@ describe('Client', () => {
       client.use(
         Mock,
         {
-          body: JSON.stringify({ item: [] }),
+          body: JSON.stringify({ _embedded: { item: [] } }),
           headers: {
             'Content-Type': 'application/json'
           }
         }
       ).listRestapis().then((restapis) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -211,7 +211,7 @@ describe('Client', () => {
         url: 'http://example.com'
       }).then((method) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -232,7 +232,7 @@ describe('Client', () => {
         statusCode: 200
       }).then((method) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -252,7 +252,7 @@ describe('Client', () => {
         restapiId: 'restapiId'
       }).then((method) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 
@@ -273,7 +273,7 @@ describe('Client', () => {
         statusCode: 200
       }).then((method) => {
         done();
-      });
+      }).catch(err => done(err));
     });
   });
 });
